@@ -54,6 +54,10 @@ web.route({
 function stage() {
     return pullLatest()
         .then(() => installDeps())
+        .then(() => {
+            if (stagingProcess) stagingProcess.kill();
+            return true;
+        })
         .then(() => startApp());
 }
 
