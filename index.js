@@ -26,7 +26,7 @@ function configure(projectPath, options) {
         method: 'POST',
         path: '/payload',
         handler: (request, reply) => {
-            var event = request.headers['X-Github-Event'] || '';
+            var event = request.headers['X-Github-Event'] || request.headers['x-github-event'] || '';
             console.log('Received Github Event:', event);
             if (event !== 'push') return reply('');
 
