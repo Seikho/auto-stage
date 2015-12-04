@@ -62,7 +62,7 @@ function stage() {
 
 function installDeps() {
     console.log('Installing Node deps...')
-    return run('npm install')
+    return run('npm install --production')
         .then(() => {
             console.log('Completed');
             return true;
