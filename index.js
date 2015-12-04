@@ -50,10 +50,13 @@ function stage() {
     return pullLatest()
         .then(() => installDeps())
         .then(() => {
-            if (typeof (stagingProcess || {}).kill === 'function') stagingProcess.kill();
+            if (typeof (stagingProcess || {}).kill === 'function') {
+                console.log('Killing existing staging process');
+                stagingProcess.kill();
+            }
             return true;
         })
-        .then(() => startApp());
+        .then(() => setTimeout(startApp, 2000));
 }
 
 function installDeps() {
