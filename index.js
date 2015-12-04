@@ -69,7 +69,7 @@ function installDeps() {
 }
 
 function startApp() {
-    var stdout = msg => console.log(msg);
+    var stdout = msg => console.log(msg.toString().trim());
     var stderr = msg => console.log('ERROR:', stderr);
     return run('npm start', { stdout, stderr });
 }
