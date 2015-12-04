@@ -37,11 +37,7 @@ function configure(projectPath, options) {
                     console.log('Will not stage');
                 return;
             }
-
-            console.log('Updating staging process...');
-            if (stagingProcess) stagingProcess.kill();
-
-            var stagingProcess = stage();
+            stagingProcess = stage();
         }
     });
     
@@ -54,7 +50,7 @@ function stage() {
     return pullLatest()
         .then(() => installDeps())
         .then(() => {
-            if (stagingProcess) stagingProcess.kill();
+            if (typeof (stagingProcess || {}).kill === 'function') stagingProcess.kill();
             return true;
         })
         .then(() => startApp());
