@@ -32,15 +32,15 @@ function configure(projectPath, options) {
 
             var branch = request.payload.ref.split('/').slice(-1);
 
-            if (branch !== gitBranch) {
-                console.log(`Branch pushed was ${branch}, not ${gitBranch}`).
-                    console.log('Will not stage');
+            if (branch.trim() !== gitBranch.trim()) {
+                console.log(`Branch pushed was ${branch}, not ${gitBranch}`);
+                console.log('Will not stage');
                 return;
             }
             stagingProcess = stage();
         }
     });
-    
+
     web.start(() => console.log('Server listening on port', port));
 
     stagingProcess = stage();
