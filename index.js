@@ -30,9 +30,9 @@ function configure(projectPath, options) {
             console.log('Received Github Event:', event);
             if (event !== 'push') return reply('');
 
-            var branch = request.payload.ref.split('/').slice(-1);
+            var branch = request.payload.ref.split('/').slice(-1)[0].trim();
 
-            if (branch.trim() !== gitBranch.trim()) {
+            if (branch !== gitBranch) {
                 console.log(`Branch pushed was ${branch}, not ${gitBranch}`);
                 console.log('Will not stage');
                 return;
