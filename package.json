@@ -1,6 +1,6 @@
 {
   "name": "auto-stage",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "a lightweight github webhook auto-staging script",
   "main": "index.js",
   "scripts": {
