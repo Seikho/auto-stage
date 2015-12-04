@@ -90,19 +90,24 @@ function pullLatest() {
 
 function run(command, options) {
     options = options || {};
-
+    var res, rej;
+    
     var child = exec(command, { cwd: projectLocation }, (error, stderr, stdout) => {
 
     });
 
     var promise = new Promise((resolve, reject) => {
-
+        res = resolve;
+        rej = reject;
+        
         child.on('close', rawCode => {
             var code = Number(rawCode);
             console.log(command, 'terminated with', code);
             if (code !== 0) return reject(`Failed during ${command}. Exited with ${code}`);
             resolve(code);
         });
+        
+        child.on('error', () => { /* NOOP */ });
 
         if (typeof options.error === 'function') {
             child.on('error', options.error);
@@ -119,7 +124,10 @@ function run(command, options) {
 
     });
 
-    promise.kill = child.kill;
+    promise.kill = () => {
+        resolve(0);
+        child.kill();
+    }
 
     return promise;
 }
