@@ -24,7 +24,7 @@ function configure(projectPath, options) {
 
     web.route({
         method: 'POST',
-        path: '/payload',
+        path: '/',
         handler: (request, reply) => {
             var event = request.headers['X-Github-Event'] || request.headers['x-github-event'] || '';
             console.log('Received Github Event:', event);
