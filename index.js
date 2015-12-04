@@ -8,6 +8,7 @@ var gitRemote = 'origin';
 var gitBranch = 'master';
 var projectLocation = '';
 var stagingProcess;
+var killStaging;
 
 var web = new hapi.Server();
 
@@ -50,9 +51,9 @@ function stage() {
     return pullLatest()
         .then(() => installDeps())
         .then(() => {
-            if (typeof (stagingProcess || {}).kill === 'function') {
+            if (typeof killStaging === 'function') {
                 console.log('Killing existing staging process');
-                stagingProcess.kill();
+                killStaging();
             }
             return true;
         })
@@ -71,7 +72,11 @@ function installDeps() {
 function startApp() {
     var stdout = msg => console.log(msg.toString().trim());
     var stderr = msg => console.log('ERROR:', stderr);
-    return run('npm start', { stdout, stderr });
+    var child = run('npm start', { stdout, stderr });
+    
+    killStaging = child.kill;
+    
+    return child;
 }
 
 function pullLatest() {
