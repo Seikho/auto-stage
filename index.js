@@ -56,7 +56,7 @@ function stage() {
             }
             return true;
         })
-        .then(() => setTimeout(startApp, 2000));
+        .then(() => setTimeout(() => { stagingProcess = startApp()}, 2000));
 }
 
 function installDeps() {
