@@ -1,0 +1,30 @@
+{
+  "name": "auto-stage",
+  "version": "0.1.0",
+  "description": "a lightweight github webhook auto-staging script",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seikho/auto-stage.git"
+  },
+  "keywords": [
+    "stage",
+    "github",
+    "webhook"
+  ],
+  "author": "Carl Winkler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seikho/auto-stage/issues"
+  },
+  "homepage": "https://github.com/seikho/auto-stage#readme",
+  "dependencies": {
+    "bluebird": "^3.0.6",
+    "hapi": "^11.1.2",
+    "minimist": "^1.2.0"
+  }
+}
