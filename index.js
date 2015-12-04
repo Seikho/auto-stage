@@ -72,6 +72,8 @@ function installDeps() {
 function startApp() {
     var stdout = msg => console.log(msg.toString().trim());
     var stderr = msg => console.log('ERROR:', stderr);
+    console.log('Attempting to start application');
+    
     var child = run('npm start', { stdout, stderr });
     
     killStaging = child.kill;
@@ -125,7 +127,7 @@ function run(command, options) {
     });
 
     promise.kill = () => {
-        resolve(0);
+        res(0);
         child.kill();
     }
 
