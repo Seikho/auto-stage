@@ -14,42 +14,41 @@ var web = new hapi.Server();
 function configure(projectPath, options) {
     options = options || {};
     var port = options.port || 3000;
-    
+
     if (options.remote) gitRemote = options.remote;
     if (options.branch) gitBranch = options.branch;
-    
+
     projectLocation = projectPath;
+
+    web.connection({ port });
+
+    web.route({
+        method: 'POST',
+        path: '/payload',
+        handler: (request, reply) => {
+            var event = request.headers['X-Github-Event'] || '';
+            console.log('Received Github Event:', event);
+            if (event !== 'push') return reply('');
+
+            var branch = request.payload.ref.split('/').slice(-1);
+
+            if (branch !== gitBranch) {
+                console.log(`Branch pushed was ${branch}, not ${gitBranch}`).
+                    console.log('Will not stage');
+                return;
+            }
+
+            console.log('Updating staging process...');
+            if (stagingProcess) stagingProcess.kill();
+
+            var stagingProcess = stage();
+        }
+    });
     
-    web.connect({ port });
     web.start(() => console.log('Server listening on port', port));
-    
+
     stagingProcess = stage();
 }
-
-web.route({
-    method: 'POST',
-    path: '/payload',
-    handler: (request, reply) => {
-        var event = request.headers['X-Github-Event'] || '';
-        console.log('Received Github Event:', event);
-        if (event !== 'push') return reply('');
-        
-        var branch = request.payload.ref.split('/').slice(-1);
-        
-        if (branch !== gitBranch) {
-            console.log (`Branch pushed was ${branch}, not ${gitBranch}`).
-            console.log('Will not stage');
-            return;
-        }
-        
-        console.log('Updating staging process...');
-        if (stagingProcess) stagingProcess.kill();
-
-        var stagingProcess = stage();
-    }
-});
-
-
 
 function stage() {
     return pullLatest()
@@ -97,7 +96,7 @@ function run(command, options) {
         child.on('close', rawCode => {
             var code = Number(rawCode);
             console.log(command, 'terminated with', code);
-            if (code !== 0) return reject(code);
+            if (code !== 0) return reject(`Failed during ${command}. Exited with ${code}`);
             resolve(code);
         });
 
